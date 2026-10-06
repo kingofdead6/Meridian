@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useOutlet } from 'react-router-dom';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
-import { ArrowRight, Code2, Menu, X } from 'lucide-react';
+import { ArrowRight, BookOpen, Code2, Menu, X } from 'lucide-react';
 import Logo from '../components/layout/Logo';
 import { Spinner } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
@@ -84,7 +84,7 @@ function Nav() {
 }
 
 const FOOTER = [
-  ['Product', [['/features', 'Features'], ['/pricing', 'Pricing'], ['/login', 'Live demo']]],
+  ['Product', [['/features', 'Features'], ['/pricing', 'Pricing'], ['/guide', 'Getting started guide'], ['/login', 'Live demo']]],
   ['Company', [['/about', 'About'], ['/contact', 'Contact']]],
   ['Modules', [['/features#sell', 'CRM & sales'], ['/features#stock', 'Inventory'], ['/features#money', 'Accounting'], ['/features#people', 'People & payroll']]],
 ];
@@ -98,7 +98,15 @@ function Footer() {
           <p className="mt-4 max-w-[34ch] text-[14px] leading-relaxed">
             Open-source ERP where every sale, purchase and payment posts itself to a ledger that always balances.
           </p>
-          <span className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-[12.5px]">
+          <Link to="/guide" className="group mt-5 flex w-fit items-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 transition hover:border-ledger-bright/40 hover:bg-white/[0.07]">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-ledger-bright/15 text-ledger-bright"><BookOpen className="size-4" /></span>
+            <span>
+              <span className="block text-[13.5px] font-semibold text-white">New to Meridian?</span>
+              <span className="block text-[12.5px]">Read the getting started guide</span>
+            </span>
+            <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+          <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-[12.5px]">
             <span className="size-2 rounded-full bg-ledger-bright animate-pulse-ring" /> Demo environment online
           </span>
         </div>

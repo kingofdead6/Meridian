@@ -1,16 +1,35 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, Search, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import CommandPalette from './CommandPalette';
 import Logo from './Logo';
+import Onboarding from '../Onboarding';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AppShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // First sign-in opens the welcome tour; ?tour=1 (from the guide page) replays it
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('tour')) {
+      setTourOpen(true);
+      navigate(location.pathname, { replace: true });
+      return undefined;
+    }
+    if (user && !user.onboardedAt) {
+      const t = setTimeout(() => setTourOpen(true), 700);
+      return () => clearTimeout(t);
+    }
+    return undefined;
+  }, [user, location.search, location.pathname, navigate]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -26,7 +45,7 @@ export default function AppShell() {
   return (
     <div className="min-h-screen lg:pl-[252px]">
       <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-[252px] lg:block">
-        <Sidebar />
+        <Sidebar onOpenTour={() => setTourOpen(true)} />
       </aside>
 
       <AnimatePresence>
@@ -34,7 +53,7 @@ export default function AppShell() {
           <div className="fixed inset-0 z-40 lg:hidden">
             <motion.div className="absolute inset-0 bg-ink/40" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileOpen(false)} />
             <motion.aside className="absolute inset-y-0 left-0 w-[272px]" initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', stiffness: 400, damping: 40 }}>
-              <Sidebar onNavigate={() => setMobileOpen(false)} />
+              <Sidebar onNavigate={() => setMobileOpen(false)} onOpenTour={() => { setMobileOpen(false); setTourOpen(true); }} />
             </motion.aside>
           </div>
         )}
@@ -63,6 +82,7 @@ export default function AppShell() {
       </main>
 
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <Onboarding open={tourOpen} onClose={() => setTourOpen(false)} />
     </div>
   );
 }

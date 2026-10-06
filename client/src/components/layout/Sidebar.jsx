@@ -1,12 +1,12 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut } from 'lucide-react';
+import { BookOpen, Compass, LogOut } from 'lucide-react';
 import { NAV, ROLE_LABELS } from '../../lib/nav';
 import { useAuth } from '../../context/AuthContext';
 import { Avatar } from '../ui';
 import Logo from './Logo';
 
-export default function Sidebar({ onNavigate }) {
+export default function Sidebar({ onNavigate, onOpenTour }) {
   const { can, user, company, logout } = useAuth();
 
   return (
@@ -55,6 +55,17 @@ export default function Sidebar({ onNavigate }) {
           );
         })}
       </nav>
+
+      <div className="mx-3 mb-3 grid grid-cols-2 gap-1.5 rounded-xl border border-white/8 bg-white/[0.03] p-1.5">
+        <button type="button" onClick={onOpenTour}
+          className="group flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-[13px] font-medium text-ink-text transition hover:bg-white/[0.06] hover:text-white">
+          <Compass className="size-4 transition-transform duration-500 group-hover:rotate-[360deg]" /> Tour
+        </button>
+        <Link to="/guide" onClick={onNavigate}
+          className="group flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-[13px] font-medium text-ink-text transition hover:bg-white/[0.06] hover:text-white">
+          <BookOpen className="size-4 transition-transform group-hover:-rotate-6" /> Guide
+        </Link>
+      </div>
 
       <div className="flex items-center gap-3 border-t border-white/8 px-4 py-3.5">
         <Avatar name={user?.name} src={user?.avatar?.url} size={34} className="bg-ink-3 text-white" />

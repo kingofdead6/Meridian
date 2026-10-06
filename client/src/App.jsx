@@ -12,6 +12,7 @@ const Features = lazy(() => import('./site/Features'));
 const Pricing = lazy(() => import('./site/Pricing'));
 const About = lazy(() => import('./site/About'));
 const Contact = lazy(() => import('./site/Contact'));
+const Guide = lazy(() => import('./site/Guide'));
 
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Assistant = lazy(() => import('./pages/Assistant'));
@@ -94,6 +95,7 @@ export default function App() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/guide" element={<Guide />} />
     </Route>
   );
 
